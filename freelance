@@ -1,0 +1,71 @@
+class FreelanceJob():
+    def __init__(self, client_name, job_title):
+        self.client_name = client_name
+        self.job_title = job_title
+
+    def calculate_earnings(self):
+        pass
+
+    def describe_job(self):
+        return f"Job: {self.job_title} for {self.client_name}"
+   
+class WritingJob(FreelanceJob):
+    def __init__(self, client_name, job_title, word_count, rate_per_word):
+        super().__init__(client_name, job_title)
+        self.word_count = word_count
+        self.rate_per_word = rate_per_word
+
+    def calculate_earnings(self):
+        return self.word_count * self.rate_per_word
+   
+    def describe_job(self):
+        return f"Writing Job: {self.job_title} for {self.client_name}, {self.word_count} words at ${self.rate_per_word:.2f} per word."
+   
+class WebDevelopmentJob(FreelanceJob):
+   
+    def __init__(self, client_name, job_title, hourly_rate, hours_worked, bonus=0):
+        super().__init__(client_name, job_title)
+        self.hourly_rate = hourly_rate
+        self.hours_worked = hours_worked
+        self.bonus = bonus
+
+    def calculate_earnings(self):
+        return (self.hourly_rate * self.hours_worked) + self.bonus
+   
+    def describe_job(self):
+        description = f"Web Development Job: {self.job_title} for {self.client_name}, {self.hours_worked} hours at ${self.hourly_rate:.2f} per hour"
+        if self.bonus > 0:
+            description += f" + ${self.bonus:.2f} bonus"
+            return description + "."
+       
+class GraphicDesignJob(FreelanceJob):
+    def __init__(self, client_name, job_title, fixed_fee, num_revisions, revision_charge=0):
+        super().__init__(client_name, job_title)
+        self.fixed_fee = fixed_fee
+        self.num_revisions = num_revisions
+        self.revision_charge = revision_charge
+
+    def calculate_earnings(self):
+        return self.fixed_fee + (self.num_revisions * self.revision_charge)
+   
+    def describe_job(self):
+        return f"Graphic Design Job: {self.job_title} for {self.client_name}, Fixed fee: ${self.fixed_fee:.2f}, {self.num_revisions} revisions (at $*{self.revision_charge:.2f} each)."
+   
+def generate_invoice(job_list):
+        print("---Freelance Job Invoice---")
+        for job in job_list:
+            earnings = job.calculate_earnings()
+            print(f"Client: {job.client_name}")
+            print(f"Job Title: {job.job_title}")
+            print(f"Earnings: ${earnings:.2f}")
+            if hasattr(job, 'describe_job'):
+                print(f"Description: {job.describe_job()}")
+                print("-" * 20)
+
+if __name__ == "__main__":
+    job1 = WritingJob("Tech Solution Inc.", "Blog Post - AI TRends", 1790, 32)
+    job2 = WebDevelopmentJob("E-Commerce Platform", "Homepage Redesign", 50, 80, bonus=495)
+    job3 = GraphicDesignJob("Marketing", 80, 30, 24)
+
+    job_list = [job1, job2, job3]
+    generate_invoice(job_list)
